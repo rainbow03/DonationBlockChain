@@ -1,0 +1,25 @@
+swagger: "2.0"
+info:
+  version: "1.0.1"
+  title: 公益链接口文档
+  description: donation block chain API
+  contact:
+    name: 'rainbow03'
+    url: 127.0.0.1
+    email: "44219650@qq.com"
+# during dev, should point to your local machine
+host: 127.0.0.1:3000
+# basePath prefixes all resource paths 
+basePath: /v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:

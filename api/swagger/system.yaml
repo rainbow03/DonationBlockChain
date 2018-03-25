@@ -1,0 +1,1051 @@
+swagger: "2.0"
+info:
+  version: "1.0.1"
+  title: 校安通超级管理员接口文档
+  description: xiaoantong API
+  contact:
+    name: '鲍宇 qq:44219650'
+    url: 10.0.0.25
+    email: "by371@163.com"
+# during dev, should point to your local machine
+host: www.xatcloud.cn:3000
+# basePath prefixes all resource paths 
+basePath: /system
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+#超级管理员注册模块
+  /model/reg:
+    x-swagger-router-controller: model
+    post:
+      tags:
+        - "model 模块"
+      summary: 超级管理员注册模块
+      operationId: system_model_reg
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员注册模块传值
+          required: true
+          schema:
+            required:
+              - modelTitle
+            properties:
+              modelTitle:
+                type: string
+                description: 系统模块名称
+              parentId:
+                type: string
+                description: 上级系统模块ID
+              note:
+                type: string
+                description: 备注
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有模块列表
+  /model/list:
+    x-swagger-router-controller: model
+    get:
+      tags:
+        - "model 模块"
+      summary: 超级管理员所有模块列表
+      operationId: system_model_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员删除某模块
+  /model/delete:
+    x-swagger-router-controller: model
+    post:
+      tags:
+        - "model 模块"
+      summary: 超级管理员删除某模块
+      operationId: system_model_delete
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员删除某模块传值
+          required: true
+          schema:
+            required:
+              - modelId
+            properties:
+              modelId:
+                type: string
+                description: 系统模块ID
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员恢复已删除模块
+  /model/recovery:
+    x-swagger-router-controller: model
+    post:
+      tags:
+        - "model 模块"
+      summary: 超级管理员恢复已删除模块
+      operationId: system_model_recovery
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员恢复已删除模块传值
+          required: true
+          schema:
+            required:
+              - modelId
+            properties:
+              modelId:
+                type: string
+                description: 系统模块ID
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有已删除模块列表
+  /model/list/delete:
+    x-swagger-router-controller: model
+    get:
+      tags:
+        - "model 模块"
+      summary: 超级管理员所有已删除模块列表
+      operationId: system_model_delete_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员编辑某模块
+  /model/edit:
+    x-swagger-router-controller: model
+    post:
+      tags:
+        - "model 模块"
+      summary: 超级管理员编辑某模块
+      operationId: system_model_edit
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员编辑某模块传值
+          required: true
+          schema:
+            required:
+              - modelId
+            properties:
+              modelId:
+                type: string
+                description: 系统模块ID
+              parentId:
+                type: string
+                description: 上级系统模块ID
+              modelTitle:
+                type: string
+                description: 系统模块名称
+              level:
+                type: number
+                description: 系统模块级别
+              note:
+                type: string
+                description: 备注
+              index:
+                type: number
+                description: 系统模块排序（顶级模块规则：现有顶级模块个数+1 ；非顶级模块规则：上级模块序号*100+上级模块的子模块个数+1）
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有一级模块列表
+  /model/list/top:
+    x-swagger-router-controller: model
+    get:
+      tags:
+        - "model 模块"
+      summary: 超级管理员所有一级模块列表
+      operationId: system_model_lv1_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有底层模块列表
+  /model/list/bottom:
+    x-swagger-router-controller: model
+    get:
+      tags:
+        - "model 模块"
+      summary: 超级管理员所有底层模块列表
+      operationId: system_model_bottom_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有流程列表
+  /flow/list:
+    x-swagger-router-controller: flow
+    get:
+      tags:
+        - "flow 流程"
+      summary: 超级管理员所有流程列表
+      operationId: system_flow_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              total:
+                type: number
+                description: 所有（符合条件的）流程个数
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  properties:
+                    _id:
+                      type: string
+                      description: 流程ID
+                    orderNum:
+                      type: number
+                      description: 排序序号
+                    url:
+                      type: string
+                      description: 相关链接 
+                    isShow:
+                      type: boolean
+                      description: 是否已删除
+                    title:
+                      type: string
+                      description: 流程名称
+                    bottomModel:
+                      type: array
+                      description: 包含的底层功能模块
+                    topModelId:
+                      type: string
+                      description: 所属一级系统模块
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员某系统注册模块流程列表
+  /flow/list/model:
+    x-swagger-router-controller: flow
+    get:
+      tags:
+        - "flow 流程"
+      summary: 超级管理员某系统注册模块流程列表
+      operationId: system_flowModel_list
+      parameters:
+        - name: modelId
+          in: query
+          description: 系统注册模块ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              total:
+                type: number
+                description: 所有（符合条件的）流程个数
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  properties:
+                    _id:
+                      type: string
+                      description: 流程ID
+                    orderNum:
+                      type: number
+                      description: 排序序号
+                    url:
+                      type: string
+                      description: 相关链接 
+                    isShow:
+                      type: boolean
+                      description: 是否已删除
+                    title:
+                      type: string
+                      description: 流程名称
+                    bottomModel:
+                      type: array
+                      description: 包含的底层功能模块
+                    topModelId:
+                      type: string
+                      description: 所属一级系统模块
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员所有流程控制列表
+  /flowControl/list:
+    x-swagger-router-controller: flowControl
+    get:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员所有流程控制列表
+      operationId: system_flowControl_list
+      parameters:
+        - name: page
+          in: query
+          description: "页数(如不传默认为1)"
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: "条目数(如不传默认为10)"
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/FlowInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员某系统注册模块流程控制列表
+  /flowControl/list/model:
+    x-swagger-router-controller: flowControl
+    get:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员某系统注册模块流程控制列表
+      operationId: system_flowControlModel_list
+      parameters:
+        - name: modelId
+          in: query
+          description: 系统注册模块ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: array
+                description: 返回值
+                items:
+                  $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员新增流程
+  /flow/add:
+    x-swagger-router-controller: flow
+    post:
+      tags:
+        - "flow 流程"
+      summary: 超级管理员新增流程
+      operationId: system_flow_add
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员新增流程传值
+          required: true
+          schema:
+            required:
+              - topModelId
+            properties:
+              topModelId:
+                type: string
+                description: 系统注册顶级模块ID
+              title:
+                type: string
+                description: 流程名称
+              url:
+                type: string
+                description: 流程URL链接
+              orderNum:
+                type: string
+                description: 流程序号（排序用）
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员修改流程
+  /flow/edit:
+    x-swagger-router-controller: flow
+    post:
+      tags:
+        - "flow 流程"
+      summary: 超级管理员修改流程
+      operationId: system_flow_edit
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员修改流程传值
+          required: true
+          schema:
+            required:
+              - flow_id
+            properties:
+              flow_id:
+                type: string
+                description: 流程ID
+              topModelId:
+                type: string
+                description: 系统注册顶级模块ID
+              title:
+                type: string
+                description: 流程名称
+              url:
+                type: string
+                description: 流程URL链接
+              orderNum:
+                type: string
+                description: 流程序号（排序用）
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/ModelInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员删除流程
+  /flow/delete:
+    x-swagger-router-controller: flow
+    post:
+      tags:
+        - "flow 流程"
+      summary: 超级管理员删除流程
+      operationId: system_flow_del
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员删除流程传值
+          required: true
+          schema:
+            required:
+              - flow_id
+            properties:
+              flow_id:
+                type: string
+                description: 流程ID
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员新增流程控制
+  /flowControl/add:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员新增流程控制
+      operationId: system_flowControl_add
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员新增流程控制传值(PS:此接口的autoControls可不传，创建流程控制成功后再调用 /flowControl/add/autoControl 接口传autoControls)
+          required: true
+          schema:
+            required:
+              - topModelId
+              - flow_id
+              - flowTitle
+            properties:
+              topModelId:
+                type: string
+                description: 系统注册顶级模块ID
+              NoTopModelId:
+                type: string
+                description: 所属非顶级系统模块(用于不同的流程)
+              flow_id:
+                type: string
+                description: 流程ID
+              flowTitle:
+                type: string
+                description: 流程名称
+              manualControlType:
+                type: number
+                description: 人工控制类型 ( map=['按单位','按部门','按角色','按人员'] )
+              manualControlId:
+                type: string
+                description: 人工控制相关id (单位ID/部门ID/角色ID/用户ID)
+              manualControlName:
+                type: string
+                description: 人工控制相关名称(单位名称/部门名称/角色名称/用户姓名)
+              autoControls:
+                type: array
+                description: '自动控制条件(满足数组内所有流程的同意或不同意) PS:此接口的autoControls可不传，创建流程控制成功后再调用 /flowControl/add/autoControl 接口传autoControls' 
+                items:
+                  properties:
+                    flowId:
+                      type: string
+                      description: 其他流程ID（注意不能和提交的flow_id一致，即本流程需要其他流程同意/不同意后方可执行）
+                    flowOrderNum:
+                      type: number
+                      description: 其他流程序号
+                    flowTitle:
+                      type: string
+                      description: 其他流程名称
+                    controlResult:
+                      type: number
+                      description: 控制结果 ( map=['已提交','同意','不同意'] PS:只用到1和2)
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/FlowControlInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员新增流程控制的自动控制内容
+  /flowControl/add/autoControl:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员新增流程控制的自动控制内容
+      operationId: system_flowControl_autoControl_add
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员新增流程控制的自动控制内容传值
+          required: true
+          schema:
+            required:
+              - flowControl_id
+            properties:
+              flowControl_id:
+                type: string
+                description: 流程控制ID
+              flow_id:
+                type: string
+                description: 流程ID
+              flowTitle:
+                type: string
+                description: 流程名称
+              flowOrderNum:
+                type: number
+                description: 流程序号
+              controlResult:
+                type: number
+                description: 控制结果 ( map=['已提交','同意','不同意'] PS:只用到1和2)
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/FlowControlInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员修改流程控制自动控制内容
+  /flowControl/edit/autoControl:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员修改流程控制自动控制内容
+      operationId: system_flowControl_autoControl_edit
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员修改流程控制自动控制内容传值
+          required: true
+          schema:
+            required:
+              - flowControl_id
+              - autoControlId
+            properties:
+              flowControl_id:
+                type: string
+                description: 流程控制ID
+              autoControlId:
+                type: string
+                description: 流程控制的自动控制ID
+              flow_id:
+                type: string
+                description: 流程ID
+              flowTitle:
+                type: string
+                description: 流程名称
+              flowOrderNum:
+                type: number
+                description: 流程序号
+              controlResult:
+                type: number
+                description: 控制结果 ( map=['已提交','同意','不同意'] PS:只用到1和2)
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/FlowControlInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员删除流程控制自动控制
+  /flowControl/delete/autoControl:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员删除流程控制自动控制
+      operationId: system_flowControl_autoControl_del
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员删除流程控制自动控制传值
+          required: true
+          schema:
+            required:
+              - flowControl_id
+              - autoControlId
+            properties:
+              flowControl_id:
+                type: string
+                description: 流程控制ID
+              autoControlId:
+                type: string
+                description: 流程控制的自动控制ID
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员修改流程控制
+  /flowControl/edit:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员修改流程控制
+      operationId: system_flowControl_edit
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员修改流程控制传值
+          required: true
+          schema:
+            required:
+              - flowControl_id
+              - flow_id
+            properties:
+              flowControl_id:
+                type: string
+                description: 流程控制ID
+              flow_id:
+                type: string
+                description: 流程ID
+              flowTitle:
+                type: string
+                description: 流程名称
+              manualControlType:
+                type: number
+                description: 人工控制类型 ( map=['按单位','按部门','按角色','按人员'] )
+              manualControlId:
+                type: string
+                description: 人工控制相关id (单位ID/部门ID/角色ID/用户ID)
+              manualControlName:
+                type: string
+                description: 人工控制相关名称(单位名称/部门名称/角色名称/用户姓名)
+              autoControls:
+                type: array
+                description: '自动控制条件(满足数组内所有流程的同意或不同意) PS:此接口的autoControls可不传，创建流程控制成功后再调用 /flowControl/add/autoControl 接口传autoControls' 
+                items:
+                  properties:
+                    flowId:
+                      type: string
+                      description: 其他流程ID（注意不能和提交的flow_id一致，即本流程需要其他流程同意/不同意后方可执行）
+                    flowOrderNum:
+                      type: number
+                      description: 其他流程序号
+                    flowTitle:
+                      type: string
+                      description: 其他流程名称
+                    controlResult:
+                      type: number
+                      description: 控制结果 ( map=['已提交','同意','不同意'] PS:只用到1和2)
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                $ref: "#/definitions/FlowControlInfo"
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#超级管理员删除流程控制
+  /flowControl/delete:
+    x-swagger-router-controller: flowControl
+    post:
+      tags:
+        - "flowControl 流程控制"
+      summary: 超级管理员删除流程控制
+      operationId: system_flowControl_del
+      parameters:
+        - name: body
+          in: body
+          description: 超级管理员删除流程控制传值
+          required: true
+          schema:
+            required:
+              - flowControl_id
+            properties:
+              flowControl_id:
+                type: string
+                description: 流程控制ID
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  ErrorResponse:
+    required:
+      - status
+      - message
+    properties:
+      message:
+        type: string
+        description: 返回错误信息
+      status:
+        type: boolean
+        description: '状态码（true/false）'
+  ModelInfo: &ModelInfo
+    type: "object"
+    properties:
+      modelTitle:
+        type: string
+        description: 系统模块名称
+      parentId:
+        type: string
+        description: 上级系统模块ID
+      level:
+        type: number
+        description: 系统模块级别
+      isShow:
+        type: boolean
+        description: 是否删除
+      note:
+        type: string
+        description: 备注
+      createTime:
+        type: number
+        description: 创建日期
+      isBottom:
+        type: boolean
+        description: 是否最底层级别
+      index:
+        type: number
+        description: "系统模块排序（规则：2-2-2-2...）"
+  FlowInfo: 
+    type: "object"
+    properties:
+      topModelId:
+        type: string
+        description: 所属一级系统模块
+      bottomModel:
+        type: array
+        description: 上级系统模块ID
+        items:
+          properties:
+            modelId:
+              type: string
+              description: 系统注册模块ID
+            modelTitle:
+              type: string
+              description: 系统注册模块名称
+      level:
+        type: number
+        description: 系统模块级别
+      isShow:
+        type: boolean
+        description: 是否删除
+      note:
+        type: string
+        description: 备注
+      createTime:
+        type: number
+        description: 创建日期
+      isBottom:
+        type: boolean
+        description: 是否最底层级别
+      index:
+        type: number
+        description: "系统模块排序（规则：2-2-2-2...）"
+  FlowControlInfo: 
+    type: "object"
+    properties:
+      topModelId:
+        type: string
+        description: 系统注册顶级模块ID
+      flow_id:
+        type: string
+        description: 流程ID
+      flowTitle:
+        type: string
+        description: 流程名称
+      manualControlType:
+        type: number
+        description: 人工控制类型 ( map=['按单位','按部门','按角色','按人员'] )
+      manualControlId:
+        type: string
+        description: 人工控制相关id (单位ID/部门ID/角色ID/用户ID)
+      manualControlName:
+        type: string
+        description: 人工控制相关名称(单位名称/部门名称/角色名称/用户姓名)
+      autoControls:
+        type: array
+        description: '自动控制条件(满足数组内所有流程的同意或不同意)' 
+        items:
+          properties:
+            flowId:
+              type: string
+              description: 其他流程ID（注意不能和提交的flow_id一致，即本流程需要其他流程同意/不同意后方可执行）
+            flowOrderNum:
+              type: number
+              description: 其他流程序号
+            flowTitle:
+              type: string
+              description: 其他流程名称
+            controlResult:
+              type: number
+              description: 控制结果 ( map=['已提交','同意','不同意'] PS:只用到1和2)

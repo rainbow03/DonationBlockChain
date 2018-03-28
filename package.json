@@ -1,9 +1,10 @@
 {
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^3.5.1",
     "mongoose": "^5.0.11",
     "truffle-contract": "^3.0.4",
-    "web3": "^1.0.0-beta.33",
+    "web3": "^0.20.0",
     "zeppelin-solidity": "^1.7.0"
   }
 }

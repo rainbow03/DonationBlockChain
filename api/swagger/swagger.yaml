@@ -10,7 +10,7 @@ info:
 # during dev, should point to your local machine
 host: 127.0.0.1:3000
 # basePath prefixes all resource paths 
-basePath: /v1
+basePath: /api
 # 
 schemes:
   # tip: remove http to make production-grade
@@ -22,4 +22,120 @@ consumes:
 # format of the responses to the client (Accepts)
 produces:
   - application/json
+definitions:
+  ErrorResponse:
+    required:
+      - status
+      - message
+    properties:
+      message:
+        type: string
+        description: 返回错误信息
+      status:
+        type: number
+        description: '状态码（0-成功，1-失败）'
 paths:
+#获取账号列表
+  /account/list:
+    x-swagger-router-controller: account
+    get:
+      tags: 
+        - "account 账号"
+      summary: 获取账号列表
+      operationId: getAccounts
+      parameters:
+      responses:
+        "200":
+          description: 成功
+          schema:
+            status:
+              type: number
+              description: '状态码（0-成功，1-失败）'
+            resource:
+              type: array
+              items:
+                type: string
+                description: 账号地址
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+#获取某账号公益币余额
+  /account/balance:
+    x-swagger-route-controller: account
+    post:
+      tags:
+        - "account 账号"
+      summary: 获取某账号公益币余额
+      operationId: refreshBalance
+      parameters:
+        - name: body
+          in: body
+          description: 传值
+          required: true
+          schema:
+            required:
+              - account
+            properties:
+              account:
+                type: string
+                description: 账号地址
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: object
+                description: 返回值
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+#公益币转账
+  /account/transfer:
+    x-swagger-route-controller: account
+    post:
+      tags:
+        - "account 账号"
+      summary: 公益币转账
+      operationId: sendCoin
+      parameters:
+        - name: body
+          in: body
+          description: 传值
+          required: true
+          schema:
+            required:
+              - amount
+              - sender
+              - receiver
+            properties:
+              amount:
+                type: string
+                description: 转账金额
+              sender:
+                type: string
+                description: 转账人地址
+              receiver:
+                type: string
+                description: 接收人地址
+      responses:
+        "200":
+          description: 成功
+          schema:
+            properties:
+              status:
+                type: boolean
+                description: 状态
+              resources:
+                type: object
+                description: 返回值
+        default:
+          description: 失败
+          schema:
+            $ref: "#/definitions/ErrorResponse"
